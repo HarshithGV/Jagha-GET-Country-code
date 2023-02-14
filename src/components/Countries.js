@@ -5,7 +5,7 @@ function App() {
   const [data, setData] = useState([]);
 
   const fetchData = () => {
-    fetch(`http://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com/getCountries`)
+    fetch(`https://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com/getCountries`)
       .then((response) => response.json())
       .then((actualData) => {
         console.log(actualData);
