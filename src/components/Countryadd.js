@@ -1,32 +1,48 @@
-import React, {useEffect, useState} from 'react'
+import { useEffect, useState } from "react";
+
 function App() {
-    const [countryname,setCountryname]=useState("");
-    const [countrycode,setCountrycode]=useState("");
+   
+  const [data, setData] = useState([]);
 
-    function SaveCountry(){
-    console.warn({countryname,countrycode});
-    let data={countryname,countrycode}
-    fetch("http://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com/addCountry", 
-    {
-      method:'POST',
-        headers:{
-           'Accept':'application/json',
-          'Content-Type':'application/json' 
-        },
-        body:JSON.stringify(data)
-   }).then((result)=>{
-    console.warn("result",result);
-   })
-    }
+  const fetchData = () => {
+    fetch(`http://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com/getCountries`)
+      .then((response) => response.json())
+      .then((actualData) => {
+        console.log(actualData);
+        setData(actualData.products);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-return(
-    <div>
-        <h1>Add Country</h1>
-        <input type="text" value={countryname} onChange={(e) => (setCountryname(e.target.value))} name="company_name" /><br/>
-        <input type="text" value={countrycode} onChange={(e) => (setCountrycode(e.target.value))} name="company_code" /><br/>
-        <button type="button" onClick={SaveCountry} >Save Country</button>
+  useEffect(() => {
+    fetchData(data);
+  }, []);
+
+  return (
+    <div className="App">
+      <p>Hello, world!</p>
+      <tbody>
+      <tr>
+          
+          <th>Country Name</th>
+          <th>Country Code</th>
+          
+      </tr>
+      {data.map((item, index) => (
+        <tr key={index}>
+       
+        <td>{item.country_name}</td>
+            <td>{item.country_code}</td>
+           
+       </tr>
+      ))}
+      </tbody>
     </div>
-);
+  );
 }
 
+  
 export default App;

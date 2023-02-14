@@ -1,40 +1,50 @@
-import React,{useEffect,useState} from 'react';
-import {Outlet, Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+
 function App() {
-  const [Datas,setDatas]=useState([])
-  useEffect(()=>{
-    fetch("http://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com:80/getCountries").then((result)=>{
-      result.json().then((resp)=>{
-        // console.warn(resp)
-        setDatas(resp)
+   
+  const [data, setData] = useState([]);
+
+  const fetchData = () => {
+    fetch(`http://jagah2-env.eba-m3zawypz.us-east-2.elasticbeanstalk.com/getCountries`)
+      .then((response) => response.json())
+      .then((actualData) => {
+        console.log(actualData);
+        setData(actualData);
+        console.log(data);
       })
-    })
-  },[])
-  console.warn(Datas)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchData(data);
+  }, []);
+
   return (
     <div className="App">
-      <h1>Country Details </h1>
-<button type="button"><Link to="/Countryadd">Add Country</Link></button>
-      <table border="1">
-       <tbody>
-       <tr>
-       
-          <td>CountryName</td>
-          <td>CountryCode</td>
-         
-        </tr>
-        {
-          Datas.map((item,index)=>
-            <tr>
+    <h1>Get API Call </h1>
+    <table border="1">
+    <tbody>
+      <tr>
           
-          <td>{item.country_name}</td>
-          <td>{item.country_code}</td>
-          </tr>
-          )
-        }
-       </tbody>
+          <th>Country Name</th>
+          <th>Country Code</th>
+          
+      </tr>
+      {data.map((item, index) => (
+        <tr key={index}>
+       
+        <td>{item.country_name}</td>
+            <td>{item.country_code}</td>
+           
+       </tr>
+      ))}
+      </tbody>
       </table>
-    </div>
+      </div>
   );
 }
+
+  
 export default App;
